@@ -1,6 +1,8 @@
-package com.hiago.planner.participant;
+package com.hiago.planner.controller;
 
-import com.hiago.planner.participant.dto.ParticipantRequestPayload;
+import com.hiago.planner.model.Participant;
+import com.hiago.planner.dto.participant.ParticipantRequestPayload;
+import com.hiago.planner.repository.ParticipantRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;

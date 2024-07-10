@@ -1,12 +1,13 @@
-package com.hiago.planner.trip;
+package com.hiago.planner.controller;
 
-import com.hiago.planner.participant.Participant;
-import com.hiago.planner.participant.ParticipantService;
-import com.hiago.planner.participant.dto.ParticipantCreateResponse;
-import com.hiago.planner.participant.dto.ParticipantData;
-import com.hiago.planner.participant.dto.ParticipantRequestPayload;
-import com.hiago.planner.trip.dto.TripCreatedResponse;
-import com.hiago.planner.trip.dto.TripRequestPayload;
+import com.hiago.planner.model.Trip;
+import com.hiago.planner.service.ParticipantService;
+import com.hiago.planner.dto.participant.ParticipantCreateResponse;
+import com.hiago.planner.dto.participant.ParticipantData;
+import com.hiago.planner.dto.participant.ParticipantRequestPayload;
+import com.hiago.planner.dto.trip.TripCreatedResponse;
+import com.hiago.planner.dto.trip.TripRequestPayload;
+import com.hiago.planner.repository.TripRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;

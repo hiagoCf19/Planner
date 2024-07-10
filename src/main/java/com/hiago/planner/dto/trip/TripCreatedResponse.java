@@ -1,4 +1,4 @@
-package com.hiago.planner.trip.dto;
+package com.hiago.planner.dto.trip;
 
 import java.util.UUID;
 

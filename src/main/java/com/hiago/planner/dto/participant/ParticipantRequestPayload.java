@@ -1,4 +1,4 @@
-package com.hiago.planner.participant.dto;
+package com.hiago.planner.dto.participant;
 
 public record ParticipantRequestPayload(String name, String email) {
 }

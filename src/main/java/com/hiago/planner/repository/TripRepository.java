@@ -1,6 +1,7 @@
-package com.hiago.planner.trip;
+package com.hiago.planner.repository;
 
 
+import com.hiago.planner.model.Trip;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.UUID;

@@ -1,4 +1,4 @@
-package com.hiago.planner.participant.dto;
+package com.hiago.planner.dto.participant;
 
 import java.util.UUID;
 

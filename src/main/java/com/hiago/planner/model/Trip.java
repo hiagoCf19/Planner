@@ -1,6 +1,6 @@
-package com.hiago.planner.trip;
+package com.hiago.planner.model;
 
-import com.hiago.planner.trip.dto.TripRequestPayload;
+import com.hiago.planner.dto.trip.TripRequestPayload;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;

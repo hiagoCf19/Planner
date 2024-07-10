@@ -1,8 +1,10 @@
-package com.hiago.planner.participant;
+package com.hiago.planner.service;
 
-import com.hiago.planner.participant.dto.ParticipantCreateResponse;
-import com.hiago.planner.participant.dto.ParticipantData;
-import com.hiago.planner.trip.Trip;
+import com.hiago.planner.model.Participant;
+import com.hiago.planner.dto.participant.ParticipantCreateResponse;
+import com.hiago.planner.dto.participant.ParticipantData;
+import com.hiago.planner.model.Trip;
+import com.hiago.planner.repository.ParticipantRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

@@ -1,6 +1,5 @@
-package com.hiago.planner.participant;
+package com.hiago.planner.model;
 
-import com.hiago.planner.trip.Trip;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
