@@ -1,14 +1,17 @@
 package com.hiago.planner.service;
 
+import com.hiago.planner.dto.participant.ParticipantRequestPayload;
 import com.hiago.planner.model.Participant;
 import com.hiago.planner.dto.participant.ParticipantCreateResponse;
 import com.hiago.planner.dto.participant.ParticipantData;
 import com.hiago.planner.model.Trip;
 import com.hiago.planner.repository.ParticipantRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 @Service
@@ -17,14 +20,21 @@ public class ParticipantService {
     @Autowired
     private ParticipantRepository repository;
 
-public void registerParticipantsToEvent(List<String> participantsToInvite, Trip trip){
-       List<Participant> participants= participantsToInvite.stream().map(email -> new Participant(email, trip)).toList();
-       this.repository.saveAll(participants);
-    System.out.println(participants.getFirst().getId());
-}
-public void triggerConfirmationEmailToParticipants(UUID tripId){
 
-}
+    public Participant confirmParticipant(UUID participantId, ParticipantRequestPayload payload){
+        Participant participant= searchParticipant(participantId);
+            participant.setIsConfirmed(true);
+            participant.setName(payload.name());
+           return participant;
+    }
+    public void registerParticipantsToEvent(List<String> participantsToInvite, Trip trip){
+           List<Participant> participants= participantsToInvite.stream().map(email -> new Participant(email, trip)).toList();
+           this.repository.saveAll(participants);
+        System.out.println(participants.getFirst().getId());
+    }
+    public void triggerConfirmationEmailToParticipants(UUID tripId){
+
+    }
     public void triggerConfirmationEmailToParticipant(String email){
 
     }
@@ -36,5 +46,7 @@ public void triggerConfirmationEmailToParticipants(UUID tripId){
     public List<ParticipantData> getAllParticipantsFromTrip(UUID tripId){
     return this.repository.findByTripId(tripId).stream().map(p -> new ParticipantData(p.getId(), p.getName(), p.getEmail(), p.getIsConfirmed())).toList();
     }
-
+    private Participant searchParticipant(UUID id){
+       return this.repository.findById(id).orElseThrow(() -> new RuntimeException("participant not found"));
+    }
 }
