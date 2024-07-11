@@ -3,9 +3,14 @@ package com.hiago.planner.controller;
 import com.hiago.planner.dto.activity.ActivityData;
 import com.hiago.planner.dto.activity.ActivityRequestPayload;
 import com.hiago.planner.dto.activity.ActivityResponse;
+import com.hiago.planner.dto.links.LinkData;
+import com.hiago.planner.dto.links.LinkRequestPayload;
+import com.hiago.planner.dto.links.LinkResponse;
 import com.hiago.planner.model.Activity;
+import com.hiago.planner.model.Link;
 import com.hiago.planner.model.Trip;
 import com.hiago.planner.service.ActivityService;
+import com.hiago.planner.service.LinkService;
 import com.hiago.planner.service.ParticipantService;
 import com.hiago.planner.dto.participant.ParticipantCreateResponse;
 import com.hiago.planner.dto.participant.ParticipantData;
@@ -28,34 +33,36 @@ public class TripController {
     @Autowired
     private ActivityService activityService;
     @Autowired
-    private TripService service;
+    private TripService tripService;
+    @Autowired
+    private LinkService linkService;
 
     @PostMapping
     public ResponseEntity<TripCreatedResponse> createTrip(@RequestBody TripRequestPayload payload){
-    var newTrip= service.crateTrip(payload);
+    var newTrip= tripService.crateTrip(payload);
     return ResponseEntity.ok(new TripCreatedResponse(newTrip.getId()));
     }
     @GetMapping("/{tripId}")
     public ResponseEntity<Trip> getTripDetails(@PathVariable UUID tripId){
-        Trip trip= service.getTripDetails(tripId);
+        Trip trip= tripService.getTripDetails(tripId);
         return ResponseEntity.ok(trip);
     }
 
     @PutMapping("/{tripId}")
     @Transactional
     public ResponseEntity<Trip> updateTripDetails(@PathVariable UUID tripId, @RequestBody TripRequestPayload payload){
-        var trip= service.updateTripDetails(tripId, payload);
+        var trip= tripService.updateTripDetails(tripId, payload);
         return ResponseEntity.ok(trip);
     }
 
     @GetMapping("/{tripId}/confirm")
     public ResponseEntity<Trip> confirmTrip(@PathVariable UUID tripId){
-        Trip rawTrip= service.confirmTrip(tripId);
+        Trip rawTrip= tripService.confirmTrip(tripId);
         return ResponseEntity.ok(rawTrip);
     }
     @PostMapping("/{tripId}/invite")
     public ResponseEntity<ParticipantCreateResponse> inviteParticipant(@PathVariable UUID tripId, @RequestBody ParticipantRequestPayload payload){
-        ParticipantCreateResponse response= service.inviteParticipant(tripId, payload);
+        ParticipantCreateResponse response= tripService.inviteParticipant(tripId, payload);
         return ResponseEntity.ok(response);
 
     }
@@ -75,5 +82,21 @@ public class TripController {
         List<ActivityData> activityDataList= this.activityService.getAllActivitiesFromId(tripId);
         return ResponseEntity.ok(activityDataList);
     }
+    @PostMapping("{tripId}/links")
 
+    public ResponseEntity<LinkResponse> registerLink(@PathVariable UUID tripId, @RequestBody LinkRequestPayload payload){
+        Link link= this.linkService.registerLink(tripId, payload);
+        return ResponseEntity.ok(new LinkResponse(link.getId()));
+    }
+    @GetMapping("/{tripId}/links")
+    public ResponseEntity<List<LinkData>> getAllLinks(@PathVariable UUID tripId){
+        List<LinkData> LinkDataList= this.linkService.getAllLinksFromTrip(tripId);
+        return ResponseEntity.ok(LinkDataList);
+    }
+// TODO:
+// ADICIONAR VALIDAÇÃO PARA VERIFICAR SE A DATA DE INCIOI DA VIAGEM É INFERIOR A DATA DE FIM DA VIAGEM.
+// VERIFICAR SE A DATA DE UMA ATIVIDADE REGISTRADA ESTA ENTRE AS DATAS DE UMA VIAGEM, A ATIVIDADE DEVESER PROGRAMADA APENAS DURANTE O TEMPO DA VIAGEM
+// MAPEAR EXCESSÕES DA APLICAÇÃO, UTILIZAR BEAN VALIDATIONS E ETC.
 }
+
+
