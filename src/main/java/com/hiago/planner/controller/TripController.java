@@ -1,13 +1,17 @@
 package com.hiago.planner.controller;
 
+import com.hiago.planner.dto.activity.ActivityData;
+import com.hiago.planner.dto.activity.ActivityRequestPayload;
+import com.hiago.planner.dto.activity.ActivityResponse;
+import com.hiago.planner.model.Activity;
 import com.hiago.planner.model.Trip;
+import com.hiago.planner.service.ActivityService;
 import com.hiago.planner.service.ParticipantService;
 import com.hiago.planner.dto.participant.ParticipantCreateResponse;
 import com.hiago.planner.dto.participant.ParticipantData;
 import com.hiago.planner.dto.participant.ParticipantRequestPayload;
 import com.hiago.planner.dto.trip.TripCreatedResponse;
 import com.hiago.planner.dto.trip.TripRequestPayload;
-import com.hiago.planner.repository.TripRepository;
 import com.hiago.planner.service.TripService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -22,7 +26,7 @@ public class TripController {
     @Autowired
     private ParticipantService participantService;
     @Autowired
-    private TripRepository tripRepository;
+    private ActivityService activityService;
     @Autowired
     private TripService service;
 
@@ -60,4 +64,16 @@ public class TripController {
         List<ParticipantData> participantsList= this.participantService.getAllParticipantsFromTrip(tripId);
         return ResponseEntity.ok(participantsList);
     }
+    @PostMapping("{tripId}/activities")
+
+    public ResponseEntity<ActivityResponse> registerActivity(@PathVariable UUID tripId, @RequestBody ActivityRequestPayload payload){
+        Activity activity= this.activityService.registerActivity(tripId, payload);
+        return ResponseEntity.ok(new ActivityResponse(activity.getId()));
+    }
+    @GetMapping("/{tripId}/activities")
+    public ResponseEntity<List<ActivityData>> getAllActivities(@PathVariable UUID tripId){
+        List<ActivityData> activityDataList= this.activityService.getAllActivitiesFromId(tripId);
+        return ResponseEntity.ok(activityDataList);
+    }
+
 }
