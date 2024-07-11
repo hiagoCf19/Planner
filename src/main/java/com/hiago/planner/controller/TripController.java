@@ -8,15 +8,12 @@ import com.hiago.planner.dto.participant.ParticipantRequestPayload;
 import com.hiago.planner.dto.trip.TripCreatedResponse;
 import com.hiago.planner.dto.trip.TripRequestPayload;
 import com.hiago.planner.repository.TripRepository;
+import com.hiago.planner.service.TripService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
-
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.List;
-import java.util.Optional;
 import java.util.UUID;
 
 @RestController
@@ -26,60 +23,36 @@ public class TripController {
     private ParticipantService participantService;
     @Autowired
     private TripRepository tripRepository;
+    @Autowired
+    private TripService service;
 
     @PostMapping
     public ResponseEntity<TripCreatedResponse> createTrip(@RequestBody TripRequestPayload payload){
-    Trip newTrip= new Trip(payload);
-
-    this.tripRepository.save(newTrip);
-    this.participantService.registerParticipantsToEvent(payload.emails_to_invite(), newTrip );
+    var newTrip= service.crateTrip(payload);
     return ResponseEntity.ok(new TripCreatedResponse(newTrip.getId()));
     }
     @GetMapping("/{tripId}")
     public ResponseEntity<Trip> getTripDetails(@PathVariable UUID tripId){
-        Optional<Trip> trip= this.tripRepository.findById(tripId);
-
-        return trip.map(ResponseEntity::ok).orElseGet(()-> ResponseEntity.notFound().build());
+        Trip trip= service.getTripDetails(tripId);
+        return ResponseEntity.ok(trip);
     }
 
     @PutMapping("/{tripId}")
     @Transactional
     public ResponseEntity<Trip> updateTripDetails(@PathVariable UUID tripId, @RequestBody TripRequestPayload payload){
-        Optional<Trip> trip= this.tripRepository.findById(tripId);
-        if(trip.isPresent()){
-            Trip rowTrip= trip.get();
-            rowTrip.setEndsAt(LocalDateTime.parse(payload.ends_at(), DateTimeFormatter.ISO_DATE_TIME));
-            rowTrip.setStartsAt(LocalDateTime.parse(payload.starts_at(), DateTimeFormatter.ISO_DATE_TIME));
-            rowTrip.setDestination(payload.destination());
-            return ResponseEntity.ok(rowTrip);
-        }
-        return ResponseEntity.notFound().build();
+        var trip= service.updateTripDetails(tripId, payload);
+        return ResponseEntity.ok(trip);
     }
 
     @GetMapping("/{tripId}/confirm")
     public ResponseEntity<Trip> confirmTrip(@PathVariable UUID tripId){
-        Optional<Trip> trip= this.tripRepository.findById(tripId);
-
-        if(trip.isPresent()){
-            Trip rowTrip= trip.get();
-            rowTrip.setIsConfirmed(true);
-            this.participantService.triggerConfirmationEmailToParticipants(tripId);
-            this.tripRepository.save(rowTrip);
-            return ResponseEntity.ok(rowTrip);
-        }
-        return ResponseEntity.notFound().build();
+        Trip rawTrip= service.confirmTrip(tripId);
+        return ResponseEntity.ok(rawTrip);
     }
     @PostMapping("/{tripId}/invite")
     public ResponseEntity<ParticipantCreateResponse> inviteParticipant(@PathVariable UUID tripId, @RequestBody ParticipantRequestPayload payload){
-        Optional<Trip> trip= this.tripRepository.findById(tripId);
-        if(trip.isPresent()){
-            Trip rawTrip= trip.get();
-
-           ParticipantCreateResponse participantResponse= this.participantService.registerParticipantToEvent(payload.email(),rawTrip);
-            if(rawTrip.getIsConfirmed()) this.participantService.triggerConfirmationEmailToParticipant(payload.email());
-            return ResponseEntity.ok(participantResponse);
-        }
-        return ResponseEntity.notFound().build();
+        ParticipantCreateResponse response= service.inviteParticipant(tripId, payload);
+        return ResponseEntity.ok(response);
 
     }
     @GetMapping("/{tripId}/participants")
