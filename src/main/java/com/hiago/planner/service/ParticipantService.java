@@ -1,7 +1,6 @@
 package com.hiago.planner.service;
 
 import com.hiago.planner.dto.participant.ParticipantConfirmRequestPayload;
-import com.hiago.planner.dto.participant.ParticipantRequestPayload;
 import com.hiago.planner.exception.ParticipantNotFoundException;
 import com.hiago.planner.model.Participant;
 import com.hiago.planner.dto.participant.ParticipantCreateResponse;

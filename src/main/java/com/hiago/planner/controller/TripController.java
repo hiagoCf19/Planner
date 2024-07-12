@@ -15,7 +15,6 @@ import com.hiago.planner.service.LinkService;
 import com.hiago.planner.service.ParticipantService;
 import com.hiago.planner.dto.participant.ParticipantCreateResponse;
 import com.hiago.planner.dto.participant.ParticipantData;
-import com.hiago.planner.dto.participant.ParticipantRequestPayload;
 import com.hiago.planner.dto.trip.TripCreatedResponse;
 import com.hiago.planner.dto.trip.TripRequestPayload;
 import com.hiago.planner.service.TripService;
@@ -97,7 +96,6 @@ public class TripController {
         return ResponseEntity.ok(LinkDataList);
     }
 // TODO:
-// ADICIONAR VALIDAÇÃO PARA VERIFICAR SE A DATA DE INCIOI DA VIAGEM É INFERIOR A DATA DE FIM DA VIAGEM.
 // VERIFICAR SE A DATA DE UMA ATIVIDADE REGISTRADA ESTA ENTRE AS DATAS DE UMA VIAGEM, A ATIVIDADE DEVESER PROGRAMADA APENAS DURANTE O TEMPO DA VIAGEM
 // MAPEAR EXCESSÕES DA APLICAÇÃO, UTILIZAR BEAN VALIDATIONS E ETC.
 }

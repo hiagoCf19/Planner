@@ -2,8 +2,8 @@ package com.hiago.planner.service;
 
 import com.hiago.planner.dto.participant.ParticipantCreateResponse;
 import com.hiago.planner.dto.participant.ParticipantInvitePayload;
-import com.hiago.planner.dto.participant.ParticipantRequestPayload;
 import com.hiago.planner.dto.trip.TripRequestPayload;
+import com.hiago.planner.exception.CompatibilityDateException;
 import com.hiago.planner.exception.TripNotFoundException;
 import com.hiago.planner.model.Trip;
 import com.hiago.planner.repository.TripRepository;
@@ -23,6 +23,7 @@ public class TripService {
     private final ParticipantService participantService;
 
     public Trip crateTrip( TripRequestPayload payload){
+        checkDateCompatibility(payload);
         Trip newTrip= new Trip(payload);
         this.repository.save(newTrip);
         this.participantService.registerParticipantsToEvent(payload.emails_to_invite(), newTrip );
@@ -54,4 +55,12 @@ public class TripService {
     private Trip searchTrip(UUID id){
         return this.repository.findById(id).orElseThrow(()-> new TripNotFoundException("Trip not found"));
     }
+    private void checkDateCompatibility(TripRequestPayload payload){
+        LocalDateTime starts= LocalDateTime.parse(payload.starts_at(), DateTimeFormatter.ISO_DATE_TIME);
+        LocalDateTime end= LocalDateTime.parse(payload.starts_at(), DateTimeFormatter.ISO_DATE_TIME);
+        if(!starts.isBefore(end)){
+            throw new CompatibilityDateException("Start date of the trip must be before the end date");
+        }
+    }
+
 }
