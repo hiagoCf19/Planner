@@ -3,6 +3,7 @@ package com.hiago.planner.config;
 import com.hiago.planner.dto.ErrorBadRequestDTO;
 import com.hiago.planner.dto.MessageErrorDTO;
 import com.hiago.planner.exception.CompatibilityDateException;
+import com.hiago.planner.exception.IncompatibleTimeException;
 import com.hiago.planner.exception.ParticipantNotFoundException;
 import com.hiago.planner.exception.TripNotFoundException;
 import org.springframework.http.HttpStatus;
@@ -31,6 +32,10 @@ public class ExceptionEntityHandler {
     public ResponseEntity<Stream<ErrorBadRequestDTO>> handleArgumentNotValid(MethodArgumentNotValidException exception){
         var errors= exception.getFieldErrors();
         return ResponseEntity.badRequest().body(errors.stream().map(ErrorBadRequestDTO::new));
+    }
+    @ExceptionHandler(IncompatibleTimeException.class)
+    public ResponseEntity<MessageErrorDTO> handleActivityDateIncompatibility(IncompatibleTimeException exception){
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(new MessageErrorDTO(exception.getMessage()));
     }
 
 }

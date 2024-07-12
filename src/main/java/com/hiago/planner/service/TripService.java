@@ -57,7 +57,7 @@ public class TripService {
     }
     private void checkDateCompatibility(TripRequestPayload payload){
         LocalDateTime starts= LocalDateTime.parse(payload.starts_at(), DateTimeFormatter.ISO_DATE_TIME);
-        LocalDateTime end= LocalDateTime.parse(payload.starts_at(), DateTimeFormatter.ISO_DATE_TIME);
+        LocalDateTime end= LocalDateTime.parse(payload.ends_at(), DateTimeFormatter.ISO_DATE_TIME);
         if(!starts.isBefore(end)){
             throw new CompatibilityDateException("Start date of the trip must be before the end date");
         }

@@ -95,7 +95,4 @@ public class TripController {
         List<LinkData> LinkDataList= this.linkService.getAllLinksFromTrip(tripId);
         return ResponseEntity.ok(LinkDataList);
     }
-// TODO:
-// VERIFICAR SE A DATA DE UMA ATIVIDADE REGISTRADA ESTA ENTRE AS DATAS DE UMA VIAGEM, A ATIVIDADE DEVESER PROGRAMADA APENAS DURANTE O TEMPO DA VIAGEM
-// MAPEAR EXCESSÕES DA APLICAÇÃO, UTILIZAR BEAN VALIDATIONS E ETC.
 }
