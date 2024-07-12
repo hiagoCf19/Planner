@@ -1,6 +1,7 @@
 package com.hiago.planner.service;
 
 import com.hiago.planner.dto.participant.ParticipantCreateResponse;
+import com.hiago.planner.dto.participant.ParticipantInvitePayload;
 import com.hiago.planner.dto.participant.ParticipantRequestPayload;
 import com.hiago.planner.dto.trip.TripRequestPayload;
 import com.hiago.planner.exception.TripNotFoundException;
@@ -8,6 +9,7 @@ import com.hiago.planner.model.Trip;
 import com.hiago.planner.repository.TripRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.UUID;
@@ -20,7 +22,7 @@ public class TripService {
 
     private final ParticipantService participantService;
 
-    public Trip crateTrip(TripRequestPayload payload){
+    public Trip crateTrip( TripRequestPayload payload){
         Trip newTrip= new Trip(payload);
         this.repository.save(newTrip);
         this.participantService.registerParticipantsToEvent(payload.emails_to_invite(), newTrip );
@@ -43,7 +45,7 @@ public class TripService {
         this.repository.save(rawTrip);
         return rawTrip;
     }
-    public ParticipantCreateResponse inviteParticipant(UUID tripId, ParticipantRequestPayload payload){
+    public ParticipantCreateResponse inviteParticipant(UUID tripId, ParticipantInvitePayload payload){
         Trip rawTrip= searchTrip(tripId);
         ParticipantCreateResponse participantResponse= this.participantService.registerParticipantToEvent(payload.email(),rawTrip);
         if(rawTrip.getIsConfirmed()) this.participantService.triggerConfirmationEmailToParticipant(payload.email());

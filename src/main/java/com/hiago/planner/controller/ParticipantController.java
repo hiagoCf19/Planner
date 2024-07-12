@@ -1,10 +1,10 @@
 package com.hiago.planner.controller;
 
+import com.hiago.planner.dto.participant.ParticipantConfirmRequestPayload;
 import com.hiago.planner.model.Participant;
-import com.hiago.planner.dto.participant.ParticipantRequestPayload;
 import com.hiago.planner.service.ParticipantService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
@@ -20,7 +20,7 @@ public class ParticipantController {
 
     @PostMapping("{participantId}/confirm")
     @Transactional
-    public ResponseEntity<Participant> confirmParticipant(@PathVariable UUID participantId, @RequestBody ParticipantRequestPayload payload){
+    public ResponseEntity<Participant> confirmParticipant(@PathVariable UUID participantId, @RequestBody @Valid ParticipantConfirmRequestPayload payload){
         var participant= service.confirmParticipant(participantId, payload);
         return ResponseEntity.ok(participant);
     }

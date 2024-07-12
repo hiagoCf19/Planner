@@ -6,6 +6,7 @@ import com.hiago.planner.dto.activity.ActivityResponse;
 import com.hiago.planner.dto.links.LinkData;
 import com.hiago.planner.dto.links.LinkRequestPayload;
 import com.hiago.planner.dto.links.LinkResponse;
+import com.hiago.planner.dto.participant.ParticipantInvitePayload;
 import com.hiago.planner.model.Activity;
 import com.hiago.planner.model.Link;
 import com.hiago.planner.model.Trip;
@@ -18,6 +19,7 @@ import com.hiago.planner.dto.participant.ParticipantRequestPayload;
 import com.hiago.planner.dto.trip.TripCreatedResponse;
 import com.hiago.planner.dto.trip.TripRequestPayload;
 import com.hiago.planner.service.TripService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
@@ -39,7 +41,7 @@ public class TripController {
     private final LinkService linkService;
 
     @PostMapping
-    public ResponseEntity<TripCreatedResponse> createTrip(@RequestBody TripRequestPayload payload){
+    public ResponseEntity<TripCreatedResponse> createTrip(@Valid @RequestBody TripRequestPayload payload){
     var newTrip= tripService.crateTrip(payload);
     return ResponseEntity.ok(new TripCreatedResponse(newTrip.getId()));
     }
@@ -51,7 +53,7 @@ public class TripController {
 
     @PutMapping("/{tripId}")
     @Transactional
-    public ResponseEntity<Trip> updateTripDetails(@PathVariable UUID tripId, @RequestBody TripRequestPayload payload){
+    public ResponseEntity<Trip> updateTripDetails(@PathVariable UUID tripId, @Valid @RequestBody TripRequestPayload payload){
         var trip= tripService.updateTripDetails(tripId, payload);
         return ResponseEntity.ok(trip);
     }
@@ -62,7 +64,7 @@ public class TripController {
         return ResponseEntity.ok(rawTrip);
     }
     @PostMapping("/{tripId}/invite")
-    public ResponseEntity<ParticipantCreateResponse> inviteParticipant(@PathVariable UUID tripId, @RequestBody ParticipantRequestPayload payload){
+    public ResponseEntity<ParticipantCreateResponse> inviteParticipant(@PathVariable UUID tripId, @RequestBody @Valid ParticipantInvitePayload payload){
         ParticipantCreateResponse response= tripService.inviteParticipant(tripId, payload);
         return ResponseEntity.ok(response);
 
@@ -74,7 +76,7 @@ public class TripController {
     }
     @PostMapping("{tripId}/activities")
 
-    public ResponseEntity<ActivityResponse> registerActivity(@PathVariable UUID tripId, @RequestBody ActivityRequestPayload payload){
+    public ResponseEntity<ActivityResponse> registerActivity(@PathVariable UUID tripId, @RequestBody @Valid ActivityRequestPayload payload){
         Activity activity= this.activityService.registerActivity(tripId, payload);
         return ResponseEntity.ok(new ActivityResponse(activity.getId()));
     }
@@ -85,7 +87,7 @@ public class TripController {
     }
     @PostMapping("{tripId}/links")
 
-    public ResponseEntity<LinkResponse> registerLink(@PathVariable UUID tripId, @RequestBody LinkRequestPayload payload){
+    public ResponseEntity<LinkResponse> registerLink(@PathVariable UUID tripId, @RequestBody @Valid LinkRequestPayload payload){
         Link link= this.linkService.registerLink(tripId, payload);
         return ResponseEntity.ok(new LinkResponse(link.getId()));
     }

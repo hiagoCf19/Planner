@@ -1,5 +1,6 @@
 package com.hiago.planner.service;
 
+import com.hiago.planner.dto.participant.ParticipantConfirmRequestPayload;
 import com.hiago.planner.dto.participant.ParticipantRequestPayload;
 import com.hiago.planner.exception.ParticipantNotFoundException;
 import com.hiago.planner.model.Participant;
@@ -18,7 +19,7 @@ public class ParticipantService {
 
     private final ParticipantRepository repository;
 
-    public Participant confirmParticipant(UUID participantId, ParticipantRequestPayload payload){
+    public Participant confirmParticipant(UUID participantId, ParticipantConfirmRequestPayload payload){
         Participant participant= searchParticipant(participantId);
             participant.setIsConfirmed(true);
             participant.setName(payload.name());
