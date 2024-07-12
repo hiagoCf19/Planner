@@ -1,11 +1,11 @@
 package com.hiago.planner.service;
 
 import com.hiago.planner.dto.activity.ActivityData;
-import com.hiago.planner.dto.participant.ParticipantData;
 import com.hiago.planner.model.Activity;
 import com.hiago.planner.dto.activity.ActivityRequestPayload;
 import com.hiago.planner.model.Trip;
 import com.hiago.planner.repository.ActivityRepository;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -13,11 +13,11 @@ import java.util.List;
 import java.util.UUID;
 
 @Service
+@RequiredArgsConstructor
 public class ActivityService {
-    @Autowired
-    private TripService tripService;
-    @Autowired
-    private ActivityRepository repository;
+
+    private final TripService tripService;
+    private final ActivityRepository repository;
 
     public Activity registerActivity(UUID tripId, ActivityRequestPayload payload) {
         Trip rawTrip = tripService.getTripDetails(tripId);

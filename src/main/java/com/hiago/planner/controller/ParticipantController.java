@@ -3,6 +3,7 @@ package com.hiago.planner.controller;
 import com.hiago.planner.model.Participant;
 import com.hiago.planner.dto.participant.ParticipantRequestPayload;
 import com.hiago.planner.service.ParticipantService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
@@ -12,10 +13,10 @@ import java.util.UUID;
 
 @RestController
 @RequestMapping("/participants")
+@RequiredArgsConstructor
 public class ParticipantController {
-    @Autowired
-    private ParticipantService service;
 
+    private final ParticipantService service;
 
     @PostMapping("{participantId}/confirm")
     @Transactional

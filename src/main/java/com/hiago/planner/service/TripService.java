@@ -3,20 +3,22 @@ package com.hiago.planner.service;
 import com.hiago.planner.dto.participant.ParticipantCreateResponse;
 import com.hiago.planner.dto.participant.ParticipantRequestPayload;
 import com.hiago.planner.dto.trip.TripRequestPayload;
+import com.hiago.planner.exception.TripNotFoundException;
 import com.hiago.planner.model.Trip;
 import com.hiago.planner.repository.TripRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.UUID;
 
 @Service
+@RequiredArgsConstructor
 public class TripService {
-    @Autowired
-    private TripRepository repository;
-    @Autowired
-    private ParticipantService participantService;
+
+    private final TripRepository repository;
+
+    private final ParticipantService participantService;
 
     public Trip crateTrip(TripRequestPayload payload){
         Trip newTrip= new Trip(payload);
@@ -48,6 +50,6 @@ public class TripService {
         return participantResponse;
     }
     private Trip searchTrip(UUID id){
-        return this.repository.findById(id).orElseThrow(()-> new RuntimeException("Trip not found"));
+        return this.repository.findById(id).orElseThrow(()-> new TripNotFoundException("Trip not found"));
     }
 }

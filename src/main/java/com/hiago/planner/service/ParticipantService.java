@@ -1,25 +1,22 @@
 package com.hiago.planner.service;
 
 import com.hiago.planner.dto.participant.ParticipantRequestPayload;
+import com.hiago.planner.exception.ParticipantNotFoundException;
 import com.hiago.planner.model.Participant;
 import com.hiago.planner.dto.participant.ParticipantCreateResponse;
 import com.hiago.planner.dto.participant.ParticipantData;
 import com.hiago.planner.model.Trip;
 import com.hiago.planner.repository.ParticipantRepository;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-
 import java.util.List;
-import java.util.Optional;
 import java.util.UUID;
 
 @Service
+@RequiredArgsConstructor
 public class ParticipantService {
 
-    @Autowired
-    private ParticipantRepository repository;
-
+    private final ParticipantRepository repository;
 
     public Participant confirmParticipant(UUID participantId, ParticipantRequestPayload payload){
         Participant participant= searchParticipant(participantId);
@@ -47,6 +44,6 @@ public class ParticipantService {
     return this.repository.findByTripId(tripId).stream().map(p -> new ParticipantData(p.getId(), p.getName(), p.getEmail(), p.getIsConfirmed())).toList();
     }
     private Participant searchParticipant(UUID id){
-       return this.repository.findById(id).orElseThrow(() -> new RuntimeException("participant not found"));
+       return this.repository.findById(id).orElseThrow(() -> new ParticipantNotFoundException("participant not found"));
     }
 }

@@ -18,7 +18,7 @@ import com.hiago.planner.dto.participant.ParticipantRequestPayload;
 import com.hiago.planner.dto.trip.TripCreatedResponse;
 import com.hiago.planner.dto.trip.TripRequestPayload;
 import com.hiago.planner.service.TripService;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
@@ -27,15 +27,16 @@ import java.util.UUID;
 
 @RestController
 @RequestMapping("/trips")
+@RequiredArgsConstructor
 public class TripController {
-    @Autowired
-    private ParticipantService participantService;
-    @Autowired
-    private ActivityService activityService;
-    @Autowired
-    private TripService tripService;
-    @Autowired
-    private LinkService linkService;
+
+    private final ParticipantService participantService;
+
+    private final ActivityService activityService;
+
+    private final TripService tripService;
+
+    private final LinkService linkService;
 
     @PostMapping
     public ResponseEntity<TripCreatedResponse> createTrip(@RequestBody TripRequestPayload payload){
@@ -98,5 +99,3 @@ public class TripController {
 // VERIFICAR SE A DATA DE UMA ATIVIDADE REGISTRADA ESTA ENTRE AS DATAS DE UMA VIAGEM, A ATIVIDADE DEVESER PROGRAMADA APENAS DURANTE O TEMPO DA VIAGEM
 // MAPEAR EXCESSÕES DA APLICAÇÃO, UTILIZAR BEAN VALIDATIONS E ETC.
 }
-
-
