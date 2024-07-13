@@ -1,8 +1,6 @@
 package com.hiago.planner.controller;
 
-import com.hiago.planner.dto.activity.ActivityData;
-import com.hiago.planner.dto.activity.ActivityRequestPayload;
-import com.hiago.planner.dto.activity.ActivityResponse;
+import com.hiago.planner.dto.activity.*;
 import com.hiago.planner.dto.links.LinkData;
 import com.hiago.planner.dto.links.LinkRequestPayload;
 import com.hiago.planner.dto.links.LinkResponse;
@@ -80,9 +78,9 @@ public class TripController {
         return ResponseEntity.ok(new ActivityResponse(activity.getId()));
     }
     @GetMapping("/{tripId}/activities")
-    public ResponseEntity<List<ActivityData>> getAllActivities(@PathVariable UUID tripId){
-        List<ActivityData> activityDataList= this.activityService.getAllActivitiesFromId(tripId);
-        return ResponseEntity.ok(activityDataList);
+    public ResponseEntity<ActivitiesResponse> getAllActivities(@PathVariable UUID tripId){
+        List<ActivityWithDate> activities= this.activityService.getAllActivitiesFromId(tripId);
+        return ResponseEntity.ok(new ActivitiesResponse(activities));
     }
     @PostMapping("{tripId}/links")
 
