@@ -14,6 +14,7 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Map;
+import java.util.TreeMap;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
@@ -42,7 +43,11 @@ public class ActivityService {
 
         Map<LocalDate, List<ActivityData>> activitiesByDate = allActivities.stream()
 //                Agrupar baseado na função:
-                .collect(Collectors.groupingBy(activity -> activity.occurs_at().toLocalDate()));
+                .collect(Collectors.groupingBy(
+                        activity -> activity.occurs_at().toLocalDate(),
+                        TreeMap::new,
+                        Collectors.toList()
+                ));
 
         return activitiesByDate.entrySet().stream()
                 .map(entry -> new ActivityWithDate(entry.getKey(), entry.getValue()))

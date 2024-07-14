@@ -49,7 +49,8 @@ public class TripService {
     public ParticipantCreateResponse inviteParticipant(UUID tripId, ParticipantInvitePayload payload){
         Trip rawTrip= searchTrip(tripId);
         ParticipantCreateResponse participantResponse= this.participantService.registerParticipantToEvent(payload.email(),rawTrip);
-        if(rawTrip.getIsConfirmed()) this.participantService.triggerConfirmationEmailToParticipant(payload.email());
+        if(rawTrip.getIsConfirmed()) this.participantService.triggerConfirmationEmailToParticipant(
+                    payload.email(), rawTrip);
         return participantResponse;
     }
     private Trip searchTrip(UUID id){
